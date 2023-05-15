@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Note as NoteModel } from "./models/note";
-import axios from "axios";
+import * as NotesApi from "./network/notes_api";
 import Note from "./components/Note";
 import styles from "./styles/NotesPage.module.css";
 
@@ -11,10 +11,11 @@ const App = () => {
   useEffect(() => {
     const loadNotes = async () => {
       try {
-        const response = await axios.get("/api/notes");
-        setNotes(response.data);
+        const notes = await NotesApi.fetchNotes();
+        setNotes(notes);
       } catch (error) {
         console.error(error);
+        alert(error);
       }
     };
 
