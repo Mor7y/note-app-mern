@@ -78,7 +78,6 @@ export const updateNote: RequestHandler<
   const noteId = req.params.noteId;
   const newTitle = req.body.title;
   const newText = req.body.text;
-
   try {
     if (!mongoose.isValidObjectId(noteId)) {
       throw createHttpError(400, "Invalid note id");

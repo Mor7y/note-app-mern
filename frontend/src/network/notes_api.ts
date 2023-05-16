@@ -4,23 +4,20 @@ import { Note } from "../models/note";
 interface AxiosConfig {
   url: string;
   method: string;
-  headers?: string;
-  body?: string;
+  headers?: object;
+  body?: object;
 }
 
 async function fetchData(config: AxiosConfig) {
+  const { url, method, headers, body } = config;
+  const axiosConfig = {
+    url: url,
+    method: method,
+    headers: headers,
+    data: body,
+  };
   try {
-    const { url, method, headers, body } = config;
-    const axiosConfig = {
-      url: url,
-      method: method,
-      headers: {
-        "Content-Type": headers,
-      },
-      body: body,
-    };
     const res = await axios.request(axiosConfig);
-    console.log(axios);
     return res;
   } catch (err) {
     if (axios.isAxiosError(err)) {
@@ -40,12 +37,15 @@ export interface NoteInput {
   text?: string;
 }
 
-export async function createNote(note: NoteInput): Promise<Note[]> {
+export async function createNote(note: NoteInput): Promise<Note> {
   const response = await fetchData({
     url: "/api/notes",
     method: "post",
-    headers: "application/json",
-    body: JSON.stringify(note),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: note,
   });
+
   return response.data;
 }
