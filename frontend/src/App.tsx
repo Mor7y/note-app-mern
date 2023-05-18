@@ -7,6 +7,9 @@ import styles from "./styles/NotesPage.module.css";
 import stylesUtils from "./styles/utils.module.css";
 import AddEditNoteDialog from "./components/AddEditNoteDialog";
 import { FaPlus } from "react-icons/fa";
+import SignUpModal from "./components/SignUpModal";
+import LoginModal from "./components/LoginModal";
+import NavBar from "./components/NavBar";
 
 const App = () => {
   const [notes, setNotes] = useState<NoteModel[]>([]);
@@ -63,48 +66,62 @@ const App = () => {
   );
 
   return (
-    <Container className={styles.notesPage}>
-      <Button
-        className={`mb-4 ${stylesUtils.blockCenter} ${stylesUtils.flexCenter}`}
-        onClick={() => setShowAddNoteDialog(true)}
-      >
-        <FaPlus />
-        Add new note
-      </Button>
-      {notesLoading && <Spinner animation="border" variant="primary" />}
-      {showNotesLoadingError && (
-        <p>Soemthing went wrong. Please refresh the page</p>
-      )}
-      {!notesLoading && !showNotesLoadingError && (
-        <>
-          {notes.length > 0 ? notesGrid : <p>You don't have any notes yet</p>}
-        </>
-      )}
-      {showAddNoteDialog && (
-        <AddEditNoteDialog
-          onDismiss={() => setShowAddNoteDialog(false)}
-          onNoteSaved={(newNote) => {
-            setNotes([...notes, newNote]);
-            setShowAddNoteDialog(false);
-          }}
-        />
-      )}
-      {noteToEdit && (
-        <AddEditNoteDialog
-          noteToEdit={noteToEdit}
-          onDismiss={() => setNoteToEdit(null)}
-          onNoteSaved={(updateNote) => {
-            setNotes(
-              notes.map((existingNote) =>
-                existingNote._id === updateNote._id ? updateNote : existingNote
-              )
-            );
-            setNoteToEdit(null);
-            setShowAddNoteDialog(false);
-          }}
-        />
-      )}
-    </Container>
+    <div>
+      <NavBar
+        loggedInUser={null}
+        onLoginClicked={() => {}}
+        onSignUpClicked={() => {}}
+        onLogoutSuccess={() => {}}
+      />
+      <Container className={styles.notesPage}>
+        <Button
+          className={`mb-4 ${stylesUtils.blockCenter} ${stylesUtils.flexCenter}`}
+          onClick={() => setShowAddNoteDialog(true)}
+        >
+          <FaPlus />
+          Add new note
+        </Button>
+        {notesLoading && <Spinner animation="border" variant="primary" />}
+        {showNotesLoadingError && (
+          <p>Soemthing went wrong. Please refresh the page</p>
+        )}
+        {!notesLoading && !showNotesLoadingError && (
+          <>
+            {notes.length > 0 ? notesGrid : <p>You don't have any notes yet</p>}
+          </>
+        )}
+        {showAddNoteDialog && (
+          <AddEditNoteDialog
+            onDismiss={() => setShowAddNoteDialog(false)}
+            onNoteSaved={(newNote) => {
+              setNotes([...notes, newNote]);
+              setShowAddNoteDialog(false);
+            }}
+          />
+        )}
+        {noteToEdit && (
+          <AddEditNoteDialog
+            noteToEdit={noteToEdit}
+            onDismiss={() => setNoteToEdit(null)}
+            onNoteSaved={(updateNote) => {
+              setNotes(
+                notes.map((existingNote) =>
+                  existingNote._id === updateNote._id
+                    ? updateNote
+                    : existingNote
+                )
+              );
+              setNoteToEdit(null);
+              setShowAddNoteDialog(false);
+            }}
+          />
+        )}
+        {false && (
+          <SignUpModal onDismiss={() => {}} onSignUpSuccess={() => {}} />
+        )}
+        {false && <LoginModal onDismiss={() => {}} onLoginSuccess={() => {}} />}
+      </Container>
+    </div>
   );
 };
 

@@ -41,6 +41,7 @@ export interface SignUpCredentials {
 }
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
+  console.log(credentials);
   const response = await fetchData({
     url: "/api/users/signup",
     method: "post",
