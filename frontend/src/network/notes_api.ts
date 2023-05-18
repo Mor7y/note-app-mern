@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Note } from "../models/note";
+import { User } from "../models/users";
 
 interface AxiosConfig {
   url: string;
@@ -26,6 +27,46 @@ async function fetchData(config: AxiosConfig) {
       throw new Error("Something went wrong");
     }
   }
+}
+
+export async function getLoggedInUser(): Promise<User> {
+  const response = await fetchData({ url: "/api/users", method: "get" });
+  return response.data;
+}
+
+export interface SignUpCredentials {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export async function signUp(credentials: SignUpCredentials): Promise<User> {
+  const response = await fetchData({
+    url: "/api/users/signup",
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: credentials,
+  });
+  return response.data;
+}
+
+export interface LoginCredentials {
+  username: string;
+  email: string;
+}
+
+export async function logIn(credentials: LoginCredentials): Promise<User> {
+  const response = await fetchData({
+    url: "/api/users/login",
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: credentials,
+  });
+  return response.data;
+}
+
+export async function logout() {
+  await fetchData({ url: "/api/users/logout", method: "post" });
 }
 
 export async function fetchNotes(): Promise<Note[]> {
