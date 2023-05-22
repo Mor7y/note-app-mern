@@ -13,7 +13,7 @@ interface AddEditNoteDialogProps {
 
 // type AddNoteDialogProps = { onDismiss: ()=> void,}
 
-const AddEditNoteDialogProps = ({
+const AddEditNoteDialog = ({
   noteToEdit,
   onDismiss,
   onNoteSaved,
@@ -79,4 +79,4 @@ const AddEditNoteDialogProps = ({
   );
 };
 
-export default AddEditNoteDialogProps;
+export default AddEditNoteDialog;
