@@ -26,7 +26,7 @@ app.use(
   })
 );
 
-app.use("/api/notes", reqioresAuth, notesRoutes);
+app.use("/api/notes", notesRoutes);
 app.use("/api/users", userRouter);
 
 app.use((req, res, next) => {
