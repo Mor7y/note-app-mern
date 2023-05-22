@@ -1,13 +1,15 @@
-import { Container } from "react-bootstrap";
 import LoginModal from "./components/LoginModal";
 import NavBar from "./components/NavBar";
 import SignUpModal from "./components/SignUpModal";
-import styles from "./styles/NotesPage.module.css";
 import { useState, useEffect } from "react";
 import { User } from "./models/users";
 import * as NotesApi from "./network/notes_api";
-import NotesPageLoggedInView from "./components/NotesPageLoggedInView";
-import NotesPageLoggedOutView from "./components/NotesPageLoggedOutView";
+import NotesPage from "./pages/NotesPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import PrivacyPage from "./pages/PrivacyPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import styles from "./styles/App.module.css";
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -28,21 +30,25 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <NavBar
-        loggedInUser={loggedInUser}
-        onLoginClicked={() => setShowLoginModal(true)}
-        onSignUpClicked={() => setShowSignUpModal(true)}
-        onLogoutSuccess={() => setLoggedInUser(null)}
-      />
-      <Container className={styles.notesPage}>
-        <>
-          {loggedInUser ? (
-            <NotesPageLoggedInView />
-          ) : (
-            <NotesPageLoggedOutView />
-          )}
-        </>
+    <BrowserRouter>
+      <div>
+        <NavBar
+          loggedInUser={loggedInUser}
+          onLoginClicked={() => setShowLoginModal(true)}
+          onSignUpClicked={() => setShowSignUpModal(true)}
+          onLogoutSuccess={() => setLoggedInUser(null)}
+        />
+        <Container className={styles.pageContainer}>
+          <Routes>
+            <Route
+              path="/"
+              element={<NotesPage loggedInUser={loggedInUser} />}
+            />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/*" element={<NotFoundPage />} />
+          </Routes>
+        </Container>
+
         {showSignUpModal && (
           <SignUpModal
             onDismiss={() => setShowSignUpModal(false)}
@@ -61,8 +67,8 @@ const App = () => {
             }}
           />
         )}
-      </Container>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 };
 

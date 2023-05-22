@@ -62,7 +62,7 @@ const AddEditNoteDialog = ({
           />
           <TextInputField
             name="text"
-            label="Tetxt"
+            label="Text"
             as="textarea"
             rows={5}
             placeholder="Text"
